@@ -57,10 +57,10 @@ class User(Base):
 
 class Location(Base):
 
-    __tablename__ = 'users_table'
+    __tablename__ = 'location_table'
     
     # Creator ID
-    creator_id  = db.Column(db.Integer(7),  nullable=False)    
+    creator_id  = db.Column(db.Integer(),  nullable=False)    
     # Name
     name  = db.Column(db.String(128),  nullable=False)
     # short description
@@ -70,21 +70,21 @@ class Location(Base):
     # Main Photo
     photo_main  = db.Column(db.String(128),  nullable=False)    
     # Category
-    category = db.Column(db.Integer(3),  nullable=False)
+    category = db.Column(db.Integer(),  nullable=False)
     # Rating
-    rating = db.Column(db.Integer(2),  nullable=False)
+    rating = db.Column(db.Integer(),  nullable=False)
     # Time To Spend
-    tts = db.Column(db.Integer(4),  nullable=False)
+    tts = db.Column(db.Integer(),  nullable=False)
     # latitude of location
-    lat_l = db.Column(db.Long(20),  nullable=False)
+    lat_l = db.Column(db.Float(),  nullable=False)
     # longitude of location
-    lon_l = db.Column(db.Long(20),  nullable=False)
+    lon_l = db.Column(db.Float(),  nullable=False)
     # latitude of start
-    lat_l_s = db.Column(db.Long(20),  nullable=False)
+    lat_l_s = db.Column(db.Float(),  nullable=False)
     # longitude of start
-    lon_l_s = db.Column(db.Long(20),  nullable=False)
+    lon_l_s = db.Column(db.Float(),  nullable=False)
     # Maximum to location difficulty
-    mtld = db.Column(db.Integer(2),  nullable=False)
+    mtld = db.Column(db.Integer(),  nullable=False)
     
     # webpage
     webpage  = db.Column(db.String(128),  nullable=False)    
@@ -96,18 +96,18 @@ class Location(Base):
     # timetable
     timetable  = db.Column(db.String(128),  nullable=False)
     # fee
-    fee = db.Column(db.Integer(1),  nullable=False)
+    fee = db.Column(db.Integer(),  nullable=False)
     # children suitable
-    child = db.Column(db.Integer(1),  nullable=False)
+    child = db.Column(db.Integer(),  nullable=False)
     # season dependant
-    season = db.Column(db.Integer(1),  nullable=False)
+    season = db.Column(db.Integer(),  nullable=False)
     
     # verified - team checked out the location
-    verified = db.Column(db.Integer(1),  nullable=False)
+    verified = db.Column(db.Integer(),  nullable=False)
     # displayed - is the location displayed in the webpage
-    displayed = db.Column(db.Integer(1),  nullable=False)
+    displayed = db.Column(db.Integer(),  nullable=False)
     # suggestion
-    suggestion = db.Column(db.Integer(1),  nullable=False)
+    suggestion = db.Column(db.Integer(),  nullable=False)
     
     # New instance instantiation procedure
     def __init__(self, creator_id, name, description_s, description_l, category, rating, tts, lat_l, lon_l, lat_l_s, lon_l_s, mtld, webpage, telephone, email, timetable, fee, child, season):

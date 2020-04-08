@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm # , RecaptchaField
 
 # Import Form elements such as TextField and BooleanField (optional)
-from wtforms import BooleanField, StringField, TextAreaField, PasswordField, HiddenField, SubmitField, validators # BooleanField
+from wtforms import BooleanField, IntegerField, DecimalField, RadioField, StringField, TextAreaField, SelectField, FileField, PasswordField, HiddenField, SubmitField, validators # BooleanField
 
 # Import Form validators
 from wtforms.validators import Email, EqualTo, ValidationError
@@ -68,13 +68,13 @@ class LocationForm(FlaskForm):
                                                validators.Length(max=1300)])    
     
     categories = [(0, 'Uncategorised'), (1, 'History'), (2, 'Nature'), (3, 'Fun'), (4, 'Castle'), (5, 'Cave'), (6, 'Waterfall'), (7, 'Hilltop/Mountain')]
-    category   = SelectField('category', choices=categories, [validators.InputRequired(message='Select a Category.')], coerce=int)
+    category   = SelectField('category', [validators.InputRequired(message='Select a Category.')], choices=categories, coerce=int)
     
-    photo_main = FileField(u'Main photo', [validators.regexp(u'^[^/\\]\.(jpg|JPG|jpeg|JPEG|png|PNG)$'),
+    photo_main = FileField(u'Main photo', [validators.regexp(u'^\[^/\\]\.(jpg|JPG|jpeg|JPEG|png|PNG)$'),
                                            validators.InputRequired(message='Select a Category.')])
     
     ratings  = [(0, 'If you have time, go see it once'), (1, 'Nothing special, but nice to see'), (2, 'Worth seeing if you can spare the time'), (3, 'Check it out, you wont regret it'), (4, 'Really good, top and see it'), (5, 'A must every time!')]
-    rating   = SelectField('Rating', choices=ratings, [validators.InputRequired(message='Select a Rate.')], coerce=int)
+    rating   = SelectField('Rating', [validators.InputRequired(message='Select a Rate.')], choices=ratings, coerce=int)
     
     tts      = IntegerField('tts', [validators.InputRequired(message='We need a username for your account.')])
     lat_l    = DecimalField('lat_l', [validators.InputRequired(message='We need a username for your account.')], places=7)
@@ -83,7 +83,7 @@ class LocationForm(FlaskForm):
     lon_l_s  = DecimalField('lon_l_s', [validators.InputRequired(message='We need a username for your account.')], places=7)
     
     mtlds = [(0, 'PP0 - Easy, do not bother to mention'), (1, 'PP1 - Peacefull walk'), (2, 'PP2 - Can have some climbing protections'), (3, 'PP3 - Climbing protections, but not exposed, phisical strenght needed'), (4, 'PP4 - Vertical, exposed route'), (5, 'PP5 - Basicaly rock climbing with steel cables'), (6, 'PP6 - Like 5 but harder and more vertica')]
-    mtld     = SelectField('Max To Location Difficulty', choices=mtlds, [validators.InputRequired(message='Select a Difficulty.')], coerce=int)
+    mtld     = SelectField('Max To Location Difficulty', [validators.InputRequired(message='Select a Difficulty.')], choices=mtlds, coerce=int)
     
     webpage  = StringField('webpage', [validators.InputRequired(message='We need a username for your account.')])
     telephone  = StringField('telephone', [validators.InputRequired(message='We need a username for your account.')])
@@ -92,13 +92,13 @@ class LocationForm(FlaskForm):
     timetable  = StringField('timetable', [validators.InputRequired(message='We need a username for your account.')])
     
     fees = [(0, 'No'), (1, 'Depends'), (2, 'Yes')]
-    fee  = RadioField('Season Dependand', choices=fees, [validators.InputRequired(message='Select if the location has fees.')], coerce=int)   
+    fee  = RadioField('Season Dependand', [validators.InputRequired(message='Select if the location has fees.')], choices=fees, coerce=int)   
     
     childs = [(0, 'No'), (1, 'Depends'), (2, 'Yes')]
-    child  = RadioField('Suitable for children', choices=childs, [validators.InputRequired(message='Select if the location is suitable for children.')], coerce=int)   
+    child  = RadioField('Suitable for children', [validators.InputRequired(message='Select if the location is suitable for children.')], choices=childs, coerce=int)   
     
     seasons = [(0, 'No'), (1, 'Yes')]
-    season  = RadioField('Season Dependand', choices=seasons, [validators.InputRequired(message='Select if the location is season dependant.')], coerce=int)    
+    season  = RadioField('Season Dependand', [validators.InputRequired(message='Select if the location is season dependant.')], choices=seasons, coerce=int)    
     
     submit = SubmitField('Submit')
     
