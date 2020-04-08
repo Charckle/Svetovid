@@ -6,25 +6,13 @@
       .map {
         height: 100%;
         width: 100%;
-		min-height: 700px;
+		min-height: 500px;
       }
     </style>
 <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js"></script>
 {% endblock extraheader  %}
 
 {% block nav_index %}active{% endblock nav_index %}
-
-{% block nav_login_out %}
-  {% if session['user_id'] %}
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('main_page_module.logout') }}">Logout </a>
-    </li>
-  {% else %}
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('main_page_module.login') }}">Login </a>
-    </li>
-  {% endif %}
-{% endblock nav_login_out %}
 
 
 {% block flashes %}
@@ -48,6 +36,7 @@
     {% endif %}
   {% endwith %}
 {% endblock flashes %}
+
 
 
 {% block content%}

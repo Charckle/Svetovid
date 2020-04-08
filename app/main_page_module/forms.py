@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm # , RecaptchaField
 
 # Import Form elements such as TextField and BooleanField (optional)
-from wtforms import IntegerField, StringField, PasswordField, SubmitField, TextAreaField, validators # BooleanField
+from wtforms import BooleanField, StringField, TextAreaField, PasswordField, HiddenField, SubmitField, validators # BooleanField
 
 # Import Form validators
 from wtforms.validators import Email, EqualTo, ValidationError
@@ -11,16 +11,24 @@ from app.main_page_module.models import User
 
 #email verification
 import re
-
-
-# Define the login form (WTForms)
+import os.path
 
 class LoginForm(FlaskForm):
     username_or_email = StringField('Username or Email', [validators.InputRequired(message='Forgot your email address?')])
     password = PasswordField('Password', [validators.InputRequired(message='Must provide a password.')])
+    remember = BooleanField()
     
     submit = SubmitField('Login')
-    
+
+class EditUserForm(FlaskForm):
+
+    id = HiddenField('id', [validators.InputRequired(message='Dont fiddle around with the code!')])
+    name   = StringField('Name', [validators.InputRequired(message='We need a name for the user.')])
+    email    = StringField('Email', [validators.InputRequired(message='We need an email for your account.')])
+    password  = PasswordField('Password')    
+    password_2 = PasswordField('Repeat password', [EqualTo('password', message='Passwords must match')])
+      
+    submit = SubmitField('Submit changes')
     
 
 class RegisterForm(FlaskForm):
@@ -50,7 +58,8 @@ class RegisterForm(FlaskForm):
                 raise ValidationError('Please use a different email address.')     
         
         else:  
-            raise ValidationError('Please use a valid email address.')
+            raise ValidationError('Please use a valid email address.')          
+        
         
 class LocationForm(FlaskForm):
     name          = StringField('Location Name', [validators.InputRequired(message='We need the name of the location.')])
@@ -99,6 +108,4 @@ class LocationForm(FlaskForm):
         
         #check if it is a real email
         if not(re.search(regex,email.data)):  
-            raise ValidationError('Please use a valid email address.')               
-      
-        
+            raise ValidationError('Please use a valid email address.')
