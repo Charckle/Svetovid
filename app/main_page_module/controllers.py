@@ -5,7 +5,7 @@ from flask import Blueprint, request, render_template, \
 from app import db
 
 # Import module forms
-from app.main_page_module.forms import LoginForm, RegisterForm, EditUserForm
+from app.main_page_module.forms import LoginForm, RegisterForm, EditUserForm, LocationForm
 
 # Import module models (i.e. User)
 from app.main_page_module.models import User
@@ -29,6 +29,15 @@ def index():
     if check_login(): return redirect(url_for("main_page_module.login"))  
 
     return render_template("main_page_module/index.html")
+
+# Set the route and accepted methods
+@main_page_module.route('/predloga', methods=['GET', 'POST'])
+def predloga():
+    if check_login(): return redirect(url_for("main_page_module.login"))
+    
+    form = LocationForm()
+
+    return render_template("main_page_module/predloga.html", form = form)
         
 @main_page_module.route('/admin/all_users/')
 def all_users():

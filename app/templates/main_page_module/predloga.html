@@ -1,0 +1,232 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/css/ol.css" type="text/css">
+    <style>
+      .map {
+        height: 100%;
+        width: 100%;
+		max-height: 400px;
+      }
+    </style>
+<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js"></script>
+{% endblock extraheader  %}
+
+{% block nav_predlagaj_lokacijo %}active{% endblock nav_predlagaj_lokacijo %}
+
+
+{% block flashes %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div>
+        {% for category, message in messages %}
+          {% if category == "error" %}
+            <div class="alert alert-danger" role="alert">
+              {{ message }}
+            </div>
+            <br>
+          {% else %}
+            <div class="alert alert-success" role="alert">
+              {{ message }}
+            </div>
+            <br>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+{% endblock flashes %}
+
+
+{% macro render_field(field, placeholder=None) %}
+<div class="form-group">
+    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+
+    {{ field.label }}
+
+    {% if field.errors %}
+        {% set css_class = css_class + ' is-invalid' %}
+
+        {% for error in field.errors %}
+            
+            <small id="{{ field.label.text }}" class="text-danger">
+                {{ error }}
+          </small>
+
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+</div>
+{% endmacro %}
+
+
+{% block content%}
+<div class="jumbotron">
+<h2>Predloga</h2>
+ <div class="row">
+	<div class="col-8">
+		<form>
+			<div class="row">
+				<div class="col-8">
+					{{ form.csrf_token }}
+
+					{{ render_field(form.name, placeholder="Ime lokacije", autofocus="") }}
+				</div>
+				<div class="col-4">
+					{{ render_field(form.photo_main, placeholder="Ime lokacije", autofocus="") }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
+					{{ render_field(form.description_s, placeholder="Kratek Opis", class="form-control-sm") }}
+				</div>
+				
+			</div>
+
+			<div class="row">
+				<div class="col-12">
+					{{ render_field(form.description_l, placeholder="Dolg Opis", class="form-control-sm", rows="4") }}
+				</div>
+				
+			</div>
+
+			<hr>
+
+			<div class="row">
+				<div class="col-6">
+					{{ render_field(form.category, class="form-control-sm", rows="4") }}
+				</div>
+				<div class="col-6">
+					{{ render_field(form.rating, class="form-control-sm", rows="4") }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6">
+					{{ render_field(form.tts, class="form-control-sm", rows="4") }}
+				</div>
+				<div class="col-6">
+					{{ render_field(form.mtld, class="form-control-sm", rows="4") }}
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-4">
+					{{ render_field(form.fee, class="form-control-sm", rows="4") }}
+				</div>
+				<div class="col-4">
+					{{ render_field(form.telephone, class="form-control-sm", rows="4") }}
+				</div>
+				<div class="col-4">
+					{{ render_field(form.email, class="form-control-sm", rows="4") }}
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-4">
+					{{ render_field(form.webpage, class="form-control-sm", rows="4") }}
+				</div>
+				<div class="col-4">
+					{{ render_field(form.child, class="form-control-sm", rows="4") }}
+				</div>
+				<div class="col-4">
+					{{ render_field(form.season, class="form-control-sm", rows="4") }}
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-6">
+					{{ render_field(form.timetable, class="form-control-sm", rows="4") }}
+				</div>
+				<div class="col-4">
+				</div>
+			</div>
+
+			<hr>
+			<div class="row">
+				<div class="col-12">
+					<button type="submit" class="btn btn-info btn-block">Submit</button>
+				</div>
+			</div>
+
+		</form>
+
+	</div>
+	<div class="col-4">
+		<div id="map" class="map"></div>
+    		<script type="text/javascript">
+      		
+			
+			var map;
+			var mapLat = 46.124048;
+			var mapLng = 15.0182222;
+			var mapDefaultZoom = 8.2;
+			
+			function initialize_map() {
+				map = new ol.Map({
+					target: "map",
+					layers: [
+						new ol.layer.Tile({
+							source: new ol.source.OSM({
+								url: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
+							})
+						})
+					],
+					view: new ol.View({
+						center: ol.proj.fromLonLat([mapLng, mapLat]),
+						zoom: mapDefaultZoom
+					})
+				});
+			}
+
+			function add_map_point(lat, lng) {
+				var vectorLayer = new ol.layer.Vector({
+				source:new ol.source.Vector({
+					features: [new ol.Feature({
+						geometry: new ol.geom.Point(ol.proj.transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857')),
+					})]
+				}),
+				style: new ol.style.Style({
+					image: new ol.style.Icon({
+					anchor: [0.5, 0.5],
+					anchorXUnits: "fraction",
+					anchorYUnits: "fraction",
+					src: "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg"
+					})
+				})
+				});
+
+				map.addLayer(vectorLayer); 
+
+				
+			}
+
+			
+			initialize_map();
+			add_map_point(46.0604336, 14.5557795);
+
+			map.on('click', function(e){
+					console.log(ol.proj.toLonLat(e.coordinate));
+					map.clear()
+					add_map_point(ol.proj.toLonLat(e.coordinate)[1], ol.proj.toLonLat(e.coordinate)[0]);
+				})
+			</script>
+			
+		<div class="row">
+			<div class="col-6">
+					{{ form.lat_l }}
+			</div>
+			<div class="col-6">
+					{{ form.lon_l }}
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<br>
+
+
+{% endblock content %}

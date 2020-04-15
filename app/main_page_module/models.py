@@ -79,10 +79,6 @@ class Location(Base):
     lat_l = db.Column(db.Float(),  nullable=False)
     # longitude of location
     lon_l = db.Column(db.Float(),  nullable=False)
-    # latitude of start
-    lat_l_s = db.Column(db.Float(),  nullable=False)
-    # longitude of start
-    lon_l_s = db.Column(db.Float(),  nullable=False)
     # Maximum to location difficulty
     mtld = db.Column(db.Integer(),  nullable=False)
     
@@ -123,8 +119,6 @@ class Location(Base):
         self.tts     = tts
         self.lat_l   = lat_l
         self.lon_l   = lon_l  
-        self.lat_l_s = lat_l_s
-        self.lon_l_s = lon_l_s
         self.mtld    = mtld
         
         self.webpage  = webpage
